@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=1440" />
+<title>Portafolio · Juan F. Bovio — Wireframes</title>
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<div id="root"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<script type="text/babel" src="wire1.jsx"></script>
+<script type="text/babel" src="wire2.jsx"></script>
+<script type="text/babel" src="wire3.jsx"></script>
+<script type="text/babel" src="wire4.jsx"></script>
+
+<script type="text/babel">
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "accent": "#ff5b2e",
+  "paper": "#f4f1ea",
+  "grid": true
+}/*EDITMODE-END*/;
+
+const OPTIONS = [
+  { id: 'node',      label: 'Node Graph',    Cmp: window.Wire1NodeGraph },
+  { id: 'terminal',  label: 'Terminal',      Cmp: window.Wire2Terminal },
+  { id: 'cinematic', label: 'Cinematic',     Cmp: window.Wire3Cinematic },
+  { id: 'magazine',  label: 'Magazine',      Cmp: window.Wire4Magazine },
+];
+
+const App = () => {
+  const [active, setActive] = React.useState('node');
+  const [tweaks, setTweaks] = window.useTweaks
+    ? window.useTweaks(TWEAK_DEFAULTS)
+    : [TWEAK_DEFAULTS, () => {}];
+
+  React.useEffect(() => {
+    const r = document.documentElement.style;
+    r.setProperty('--accent', tweaks.accent);
+    r.setProperty('--paper', tweaks.paper);
+    // recompute paper-alt as a slightly darker tint
+    r.setProperty('--paper-alt', shade(tweaks.paper, -0.04));
+    r.setProperty('--grid', tweaks.grid ? 'rgba(26,26,26,0.07)' : 'rgba(0,0,0,0)');
+  }, [tweaks]);
+
+  const Active = OPTIONS.find(o => o.id === active)?.Cmp || (() => null);
+
+  return (
+    <>
+      <div className="tabbar">
+        <div className="brand">
+          <span className="dot"></span>
+          bovio.wire
+          <small>· low-fi explorations</small>
+        </div>
+        {OPTIONS.map((o, i) => (
+          <button
+            key={o.id}
+            className={`tab ${active === o.id ? 'active' : ''}`}
+            onClick={() => setActive(o.id)}
+            data-screen-label={`tab 0${i+1}`}
+          >
+            <span className="num">0{i+1}</span>{o.label}
+          </button>
+        ))}
+        <span className="spacer"></span>
+        <span className="hint">pick a direction → we'll take one to hi-fi</span>
+      </div>
+
+      <Active />
+
+      {window.TweaksPanel && (
+        <window.TweaksPanel title="Tweaks" defaultOpen={false}>
+          <window.TweakSection title="Paleta">
+            <window.TweakColor label="Acento" value={tweaks.accent}
+              onChange={v => setTweaks({ accent: v })} />
+            <window.TweakColor label="Paper" value={tweaks.paper}
+              onChange={v => setTweaks({ paper: v })} />
+          </window.TweakSection>
+          <window.TweakSection title="Canvas">
+            <window.TweakToggle label="Mostrar grid" value={tweaks.grid}
+              onChange={v => setTweaks({ grid: v })} />
+          </window.TweakSection>
+          <window.TweakSection title="Saltar a">
+            {OPTIONS.map(o => (
+              <window.TweakButton key={o.id} label={o.label}
+                onClick={() => setActive(o.id)} />
+            ))}
+          </window.TweakSection>
+        </window.TweaksPanel>
+      )}
+    </>
+  );
+};
+
+function shade(hex, pct) {
+  const h = hex.replace('#','');
+  const f = parseInt(h, 16);
+  const t = pct < 0 ? 0 : 255;
+  const p = Math.abs(pct);
+  const r = (f >> 16), g = (f >> 8) & 0xff, b = f & 0xff;
+  const nr = Math.round((t - r) * p) + r;
+  const ng = Math.round((t - g) * p) + g;
+  const nb = Math.round((t - b) * p) + b;
+  return '#' + ((1 << 24) + (nr << 16) + (ng << 8) + nb).toString(16).slice(1);
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

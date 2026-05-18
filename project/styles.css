@@ -1,0 +1,333 @@
+/* ============================================
+   WIREFRAME SHARED STYLES
+   ============================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;700&family=Kalam:wght@300;400;700&family=JetBrains+Mono:wght@300;400;500;700&family=Archivo+Black&display=swap');
+
+:root {
+  --ink: #1a1a1a;
+  --ink-soft: #4a4a4a;
+  --ink-faint: #9a9a9a;
+  --paper: #f4f1ea;
+  --paper-alt: #ede8dc;
+  --line: #1a1a1a;
+  --accent: #ff5b2e;
+  --accent-soft: #ffd9cc;
+  --grid: rgba(26, 26, 26, 0.07);
+  --sketch-w: 1.6px;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: 'Kalam', 'Caveat', cursive;
+  overflow-x: hidden;
+}
+
+/* ---------- TAB BAR ---------- */
+.tabbar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--paper);
+  border-bottom: 2px solid var(--ink);
+  padding: 14px 24px 10px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.tabbar .brand {
+  font-family: 'Caveat', cursive;
+  font-size: 22px;
+  font-weight: 700;
+  margin-right: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.tabbar .brand .dot {
+  width: 10px; height: 10px; border-radius: 50%;
+  background: var(--accent);
+  display: inline-block;
+}
+.tabbar .brand small {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--ink-soft);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: 400;
+}
+
+.tab {
+  font-family: 'Kalam', cursive;
+  font-size: 16px;
+  border: 2px solid var(--ink);
+  background: var(--paper);
+  color: var(--ink);
+  padding: 6px 14px 5px;
+  cursor: pointer;
+  border-radius: 22px 18px 24px 20px / 20px 24px 18px 22px;
+  transition: all 0.15s;
+  position: relative;
+  white-space: nowrap;
+}
+.tab:hover { transform: translate(-1px, -1px); box-shadow: 2px 2px 0 var(--ink); }
+.tab.active {
+  background: var(--ink);
+  color: var(--paper);
+}
+.tab .num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  opacity: 0.6;
+  margin-right: 6px;
+}
+.tabbar .spacer { flex: 1; }
+.tabbar .hint {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--ink-soft);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* ---------- WIREFRAME STAGE ---------- */
+.stage {
+  min-height: calc(100vh - 60px);
+  padding: 32px 40px 80px;
+  background-image:
+    linear-gradient(to right, var(--grid) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid) 1px, transparent 1px);
+  background-size: 24px 24px;
+  position: relative;
+}
+
+.stage-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 28px;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.stage-header h1 {
+  font-family: 'Caveat', cursive;
+  font-size: 44px;
+  margin: 0;
+  line-height: 1;
+  font-weight: 700;
+  white-space: nowrap;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.stage-header .meta { flex: 0 0 auto; }
+.stage-header h1 .tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  background: var(--accent);
+  color: white;
+  padding: 3px 10px;
+  border-radius: 3px;
+  vertical-align: middle;
+  margin-left: 8px;
+  letter-spacing: 0.08em;
+  font-weight: 500;
+}
+.stage-header .meta {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--ink-soft);
+  line-height: 1.6;
+  max-width: 360px;
+  text-align: right;
+}
+.stage-header .meta strong { color: var(--ink); }
+
+/* ---------- SKETCHY PRIMITIVES ---------- */
+.sketch-box {
+  border: var(--sketch-w) solid var(--ink);
+  background: var(--paper);
+  border-radius: 8px 10px 6px 12px / 10px 6px 12px 8px;
+  position: relative;
+}
+.sketch-box.dashed { border-style: dashed; }
+.sketch-box.filled { background: var(--ink); color: var(--paper); }
+.sketch-box.accent { background: var(--accent-soft); }
+
+.handlabel {
+  font-family: 'Caveat', cursive;
+  font-size: 18px;
+  font-weight: 500;
+}
+.monolabel {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+/* Striped placeholder for media */
+.placeholder {
+  background:
+    repeating-linear-gradient(
+      -45deg,
+      transparent 0,
+      transparent 8px,
+      var(--grid) 8px,
+      var(--grid) 9px
+    ),
+    var(--paper-alt);
+  border: var(--sketch-w) solid var(--ink);
+  border-radius: 6px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--ink-soft);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  overflow: hidden;
+}
+.placeholder::before {
+  content: attr(data-label);
+  background: var(--paper);
+  padding: 4px 8px;
+  border: 1px dashed var(--ink-soft);
+  border-radius: 3px;
+}
+.placeholder.play::after {
+  content: '';
+  position: absolute;
+  width: 0; height: 0;
+  border-left: 16px solid var(--ink);
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  left: calc(50% - 40px);
+  top: calc(50% - 10px);
+  opacity: 0.5;
+}
+
+/* Annotations */
+.annotation {
+  position: absolute;
+  font-family: 'Caveat', cursive;
+  font-size: 16px;
+  color: var(--accent);
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  pointer-events: none;
+  line-height: 1.1;
+  max-width: 180px;
+}
+.annotation .arrow {
+  font-size: 20px;
+  line-height: 1;
+  transform: translateY(-2px);
+}
+.annotation.right { flex-direction: row-reverse; }
+
+/* Arrows between things (drawn as bordered div) */
+.arrow-line {
+  position: absolute;
+  border-top: var(--sketch-w) dashed var(--ink);
+  pointer-events: none;
+}
+
+/* Chip */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px 2px;
+  border: var(--sketch-w) solid var(--ink);
+  border-radius: 20px 16px 24px 18px / 18px 24px 16px 20px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.05em;
+  background: var(--paper);
+  white-space: nowrap;
+}
+.chip.filled { background: var(--ink); color: var(--paper); }
+.chip.accent { background: var(--accent); color: white; border-color: var(--accent); }
+
+/* ---------- SCREEN LABEL ---------- */
+.screen-label {
+  position: absolute;
+  top: 12px;
+  left: 16px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--ink-soft);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  background: var(--paper);
+  padding: 2px 6px;
+  border: 1px dashed var(--ink-soft);
+  z-index: 2;
+}
+
+/* Wire / pipe */
+.wire {
+  stroke: var(--ink);
+  stroke-width: 1.6;
+  fill: none;
+}
+.wire.accent { stroke: var(--accent); stroke-width: 2; }
+.wire.dashed { stroke-dasharray: 4 4; }
+
+/* Floating note (post-it) */
+.postit {
+  background: #fff1a8;
+  border: 1.2px solid rgba(0,0,0,0.2);
+  padding: 10px 12px;
+  font-family: 'Caveat', cursive;
+  font-size: 16px;
+  line-height: 1.2;
+  transform: rotate(-2deg);
+  box-shadow: 2px 3px 0 rgba(0,0,0,0.08);
+  max-width: 200px;
+}
+.postit.pink { background: #ffcfc4; }
+.postit.blue { background: #c4e4ff; }
+
+/* ---------- SCROLL SECTION ---------- */
+.scroll-section {
+  position: relative;
+  margin-top: 48px;
+  padding-top: 28px;
+  border-top: 1.6px dashed var(--ink);
+}
+.scroll-section > .section-tag {
+  position: absolute;
+  top: -12px;
+  left: 0;
+  background: var(--paper);
+  padding: 0 10px 0 0;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.scroll-section > .section-tag b { color: var(--ink); }
+
+/* Utility */
+.row { display: flex; }
+.col { display: flex; flex-direction: column; }
+.gap-8 { gap: 8px; }
+.gap-12 { gap: 12px; }
+.gap-16 { gap: 16px; }
+.gap-24 { gap: 24px; }
+.gap-32 { gap: 32px; }
+
+.hidden { display: none !important; }

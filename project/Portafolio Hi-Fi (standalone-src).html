@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=1440, initial-scale=1" />
+<title>Juan F. Bovio · Senior Pipeline TD</title>
+<link rel="stylesheet" href="hifi-styles.css" />
+<meta name="ext-resource-dependency" content="jBovio_pipeline_TD.pdf" data-resource-id="cvPdf" />
+<template id="__bundler_thumbnail" data-bg-color="#0d0d0f">
+  <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+    <rect width="1200" height="800" fill="#0d0d0f"/>
+    <g transform="translate(600 400)" text-anchor="middle" font-family="Archivo Black, sans-serif" fill="#ededea">
+      <text y="-20" font-size="220" letter-spacing="-8">JFB</text>
+      <text y="80" font-size="36" letter-spacing="14" fill="#ff6a3d">PIPELINE · TD</text>
+      <circle cx="-300" cy="-30" r="10" fill="#ff6a3d"/>
+    </g>
+  </svg>
+</template>
+</head>
+<body>
+<div id="root"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script>
+  // Patch the CV download link after JSX renders so it points at the inlined blob.
+  window.__patchCvLink = () => {
+    const url = window.__resources && window.__resources.cvPdf;
+    if (!url) return;
+    document.querySelectorAll('a[href$="jBovio_pipeline_TD.pdf"]').forEach(a => {
+      a.setAttribute('href', url);
+    });
+  };
+  // Run after React has mounted (a few attempts to cover async render).
+  let __patchTries = 0;
+  const __patchInterval = setInterval(() => {
+    window.__patchCvLink();
+    if (++__patchTries > 20) clearInterval(__patchInterval);
+  }, 250);
+</script>
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<script type="text/babel" src="hifi-hero-about.jsx"></script>
+<script type="text/babel" src="hifi-projects.jsx"></script>
+<script type="text/babel" src="hifi-timeline-cv.jsx"></script>
+
+<script type="text/babel">
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "accent": "#ff6a3d",
+  "bg": "#0d0d0f",
+  "paper": "#ede7d9",
+  "showGrain": true,
+  "featuredTitle": "Featured Project",
+  "featuredDesc": "Este nodo es editable: cambia título, descripción, stack y URL del video desde el panel de Tweaks. Acepta YouTube, Vimeo embed URLs, o .mp4/.webm directo.",
+  "featuredTech": "Python, PySide, USD",
+  "featuredRole": "Lead dev",
+  "featuredYear": "2026",
+  "featuredImpact": "pega tu métrica",
+  "featuredVideoUrl": ""
+}/*EDITMODE-END*/;
+
+const App = () => {
+  const [tweaks, setTweaks] = window.useTweaks
+    ? window.useTweaks(TWEAK_DEFAULTS)
+    : [TWEAK_DEFAULTS, () => {}];
+
+  React.useEffect(() => {
+    const r = document.documentElement.style;
+    r.setProperty('--accent', tweaks.accent);
+    r.setProperty('--bg', tweaks.bg);
+    r.setProperty('--paper', tweaks.paper);
+  }, [tweaks]);
+
+  return (
+    <>
+      <nav className="nav">
+        <a href="#top" className="logo"><span className="dot"></span> JFB · PIPELINE TD</a>
+        <ul>
+          <li><a href="#about"><span className="num">01</span>about</a></li>
+          <li><a href="#work"><span className="num">02</span>work</a></li>
+          <li><a href="#experience"><span className="num">03</span>experience</a></li>
+          <li><a href="#contact"><span className="num">04</span>hire</a></li>
+        </ul>
+      </nav>
+
+      <window.Hero />
+      <window.About />
+      <window.Projects featured={{
+        title: tweaks.featuredTitle,
+        desc: tweaks.featuredDesc,
+        tech: (tweaks.featuredTech || '').split(',').map(s => s.trim()).filter(Boolean),
+        role: tweaks.featuredRole,
+        year: tweaks.featuredYear,
+        impact: tweaks.featuredImpact,
+        videoUrl: tweaks.featuredVideoUrl,
+      }} />
+      <window.PullQuote />
+      <window.Timeline />
+      <window.CV />
+      <window.Footer />
+
+      {window.TweaksPanel && (
+        <window.TweaksPanel title="Tweaks" defaultOpen={false}>
+          <window.TweakSection title="Paleta">
+            <window.TweakColor label="Acento" value={tweaks.accent}
+              onChange={v => setTweaks({ accent: v })} />
+            <window.TweakColor label="Fondo" value={tweaks.bg}
+              onChange={v => setTweaks({ bg: v })} />
+            <window.TweakColor label="Paper (about)" value={tweaks.paper}
+              onChange={v => setTweaks({ paper: v })} />
+          </window.TweakSection>
+          <window.TweakSection title="Saltar a">
+            <window.TweakButton label="Hero"       onClick={() => location.hash = '#top'} />
+            <window.TweakButton label="About"      onClick={() => location.hash = '#about'} />
+            <window.TweakButton label="Work"       onClick={() => location.hash = '#work'} />
+            <window.TweakButton label="Experience" onClick={() => location.hash = '#experience'} />
+            <window.TweakButton label="Hire"       onClick={() => location.hash = '#contact'} />
+          </window.TweakSection>
+          <window.TweakSection title="Featured Project (nodo #06)">
+            <window.TweakText label="Título" value={tweaks.featuredTitle}
+              onChange={v => setTweaks({ featuredTitle: v })} />
+            <window.TweakText label="Descripción" value={tweaks.featuredDesc} multiline
+              onChange={v => setTweaks({ featuredDesc: v })} />
+            <window.TweakText label="Stack (coma-separado)" value={tweaks.featuredTech}
+              onChange={v => setTweaks({ featuredTech: v })} />
+            <window.TweakText label="Rol" value={tweaks.featuredRole}
+              onChange={v => setTweaks({ featuredRole: v })} />
+            <window.TweakText label="Año" value={tweaks.featuredYear}
+              onChange={v => setTweaks({ featuredYear: v })} />
+            <window.TweakText label="Impacto" value={tweaks.featuredImpact}
+              onChange={v => setTweaks({ featuredImpact: v })} />
+            <window.TweakText label="Video URL (YouTube/Vimeo embed o .mp4)" value={tweaks.featuredVideoUrl}
+              onChange={v => setTweaks({ featuredVideoUrl: v })} />
+          </window.TweakSection>
+        </window.TweaksPanel>
+      )}
+    </>
+  );
+};
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>
