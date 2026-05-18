@@ -1,0 +1,167 @@
+/* HERO + ABOUT sections */
+
+const Hero = () => {
+  return (
+    <section className="hero" id="top" data-screen-label="01 Hero">
+      <div className="hero-reel"></div>
+
+      <div className="letterbox-t"></div>
+
+      <div className="slate">
+        <div className="row"><span className="rec">◉ REC</span><span>REEL_2026.v04</span></div>
+        <div className="row"><span>CAM_A</span><span>ROLL 01</span><span>TAKE 12</span></div>
+        <div className="row"><span>2.39 : 1</span><span>24 fps</span></div>
+      </div>
+
+      <div className="tc">
+        <div>JFB / PIPELINE TD</div>
+        <div>00:00:03:14</div>
+        <div>SCENE — PORTFOLIO</div>
+      </div>
+
+      <div className="hero-content">
+        <div className="eyebrow">
+          <span className="rule"></span>
+          <span>Senior · Pipeline · TD · 16 YRS</span>
+        </div>
+        <h1>
+          J.F.<br />
+          Bovio<span className="it">.</span>
+        </h1>
+        <p className="sub">
+          Pipeline TD with 16 years bridging creative vision and technical execution in animation and VFX. Specialist in ShotGrid/Flow workflows, Python tooling, and render farm architecture — equally comfortable architecting systems and sitting with artists to understand what's slowing them down.
+        </p>
+      </div>
+
+      <div className="hero-footer">
+        <a className="play" href="https://www.youtube.com/playlist?list=PLd1C1jo9OdEAxlaxi1ABQNjy-Wzx4C1Va" target="_blank" rel="noopener noreferrer">
+          <span className="circle"></span>
+          <span>play reel · </span>
+        </a>
+        <div className="chips">
+          <span className="chip accent">◉ open to work</span>
+          <span className="chip">Maya</span>
+          <span className="chip">Houdini</span>
+          <span className="chip">Nuke</span>
+          <span className="chip">USD</span>
+          <span className="chip">Python</span>
+          <span className="chip">ShotGrid</span>
+        </div>
+      </div>
+
+      <div className="letterbox-b"></div>
+
+      <div className="scroll-cue">
+        <span>scroll</span>
+        <span className="line"></span>
+      </div>
+    </section>);
+
+};
+
+const About = () => {
+  return (
+    <section className="section about" id="about" data-screen-label="02 About">
+      <div className="section-head">
+        <div className="tag">§ 01 — about</div>
+        <h2>pipelines,<br /><span className="it">not</span> bottlenecks.</h2>
+        <div className="meta">
+          <b>based in</b><br />
+          Monterrey, MX<br /><br />
+          <b>availability</b><br />
+          open · remote / hybrid<br /><br />
+          <b>languages</b><br />
+          Español · English
+        </div>
+      </div>
+
+      <div className="about-grid">
+        <div className="lead">
+          Fifteen years sitting <span className="underline">next to artists</span> to understand what's slowing them down — then writing the tool that unblocks them. I design production workflows that <span className="accent">scale</span>, and I ship the Python, the database, the render farm config, and the production-ready tools that bring them into the viewport. Track record on high-profile AAA game cinematics and broadcast animation.
+        </div>
+
+        <div className="about-side">
+          <div className="kv">
+            <span className="k">focus</span>
+            <span className="v">ShotGrid/Flow · Python · USD · Render farm architecture</span>
+          </div>
+          <div className="kv">
+            <span className="k">DCCs</span>
+            <span className="v">Maya · Houdini · Nuke · Blender · Unreal · ZBrush</span>
+          </div>
+          <div className="kv">
+            <span className="k">languages</span>
+            <span className="v">Python · PySide/Qt · MEL/PyMEL · VEX </span>
+          </div>
+          <div className="kv">
+            <span className="k">infra</span>
+            <span className="v">Deadline · Perforce · PostgreSQL · Docker</span>
+          </div>
+        </div>
+      </div>
+
+      <div className="tape-stack-head">
+        <span className="lbl">§ 01.b — selected reels</span>
+        <span className="title">a few clips.</span>
+        <span className="count">04 / 04 · 2024–2026</span>
+      </div>
+      <div className="tape-stack">
+        {[
+        { n: '02', id: 'tWuorM43hv4', title: 'Spice Frontier', tag: 'Pipeline · Tools', studio: 'AAA CINEMATIC' },
+        { n: '02', id: 'dadLtfngQH8', title: 'Batman', tag: 'Pipeline · USD', studio: 'ANIMATION' },
+        { n: '03', id: 'HFeqtXim69g', title: 'Randal', tag: 'Pipeline · Python · Unity', studio: 'RIG, MOTION CAPTURE' },
+        { n: '04', id: 'eHS_WYrK69Q', title: 'Huevocartoon', tag: 'Pipeline · Broadcast', studio: 'BROADCAST' }].
+        map((t, i) => {
+          return (
+            <a
+              key={i}
+              className={`tape t${i + 1}`}
+              href={`https://www.youtube.com/watch?v=${t.id}`}
+              target="_top"
+              rel="noopener noreferrer">
+              
+              <div className="tape-thumb">
+                <img src={`https://i.ytimg.com/vi/${t.id}/hqdefault.jpg`} alt={t.title} />
+              </div>
+              <div className="tape-slate">
+                <span className="rec">REC</span>
+                <span>YT · {t.n}</span>
+              </div>
+              <span className="tape-play"></span>
+              <div className="tape-meta">
+                <div className="num">CLIP · {t.n} — {t.studio}</div>
+                <div className="title">{t.title}</div>
+                <div className="row">
+                  <span>{t.tag}</span>
+                  <span>2.39:1</span>
+                </div>
+              </div>
+            </a>);
+
+        })}
+      </div>
+
+      <div className="about-stats">
+        <div className="stat">
+          <div className="n">15<span style={{ color: 'var(--accent)' }}>+</span></div>
+          <div className="l">years in pipeline</div>
+        </div>
+        <div className="stat">
+          <div className="n">tons</div>
+          <div className="l">tools shipped</div>
+        </div>
+        <div className="stat">
+          <div className="n">06</div>
+          <div className="l">studios</div>
+        </div>
+        <div className="stat">
+          <div className="n">∞</div>
+          <div className="l">artists unblocked</div>
+        </div>
+      </div>
+    </section>);
+
+};
+
+window.Hero = Hero;
+window.About = About;
