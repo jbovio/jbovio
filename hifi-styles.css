@@ -1652,3 +1652,225 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .tab-panel-body > .info { order: 1; }
 .tab-panel-body > .media { order: 2; }
 .tab-panel-body > .info-meta-bar { order: 3; }
+
+
+/* =====================================================================
+   ORGANIC MOTION LAYER
+   Slow "breathing" backgrounds, spring hovers, scroll reveals.
+   All of it switches off with prefers-reduced-motion.
+   ===================================================================== */
+:root {
+  --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* --- Hero: drifting light instead of a static gradient --- */
+.hero-reel::after {
+  inset: -20%;
+  filter: blur(40px);
+  animation: aurora 22s ease-in-out infinite alternate;
+}
+@keyframes aurora {
+  0%   { transform: translate3d(0, 0, 0) scale(1) rotate(0deg); }
+  33%  { transform: translate3d(-4%, 3%, 0) scale(1.08) rotate(4deg); }
+  66%  { transform: translate3d(3%, -2%, 0) scale(0.96) rotate(-3deg); }
+  100% { transform: translate3d(-2%, -4%, 0) scale(1.05) rotate(2deg); }
+}
+.hero-reel {
+  animation: breathe 14s ease-in-out infinite alternate;
+}
+@keyframes breathe {
+  from { filter: brightness(0.92) saturate(0.95); }
+  to   { filter: brightness(1.08) saturate(1.1); }
+}
+
+/* --- Hero: gentle entrance --- */
+.hero-content .eyebrow,
+.hero-content h1,
+.hero-content .sub,
+.hero-footer {
+  opacity: 0;
+  animation: rise 1.1s var(--ease-soft) forwards;
+}
+.hero-content .eyebrow { animation-delay: 0.15s; }
+.hero-content h1       { animation-delay: 0.3s; }
+.hero-content .sub     { animation-delay: 0.55s; }
+.hero-footer           { animation-delay: 0.8s; }
+@keyframes rise {
+  from { opacity: 0; transform: translateY(24px); filter: blur(6px); }
+  to   { opacity: 1; transform: none; filter: blur(0); }
+}
+.hero-content h1 .it {
+  display: inline-block;
+  animation: bob 4s ease-in-out infinite;
+}
+@keyframes bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+
+/* --- Play button: soft ripple instead of a hard ring --- */
+.hero-footer .play .circle::before {
+  content: '';
+  position: absolute; inset: -1px;
+  border-radius: 50%;
+  border: 1.5px solid var(--accent);
+  animation: ripple 2.8s var(--ease-soft) infinite;
+}
+@keyframes ripple {
+  from { transform: scale(1); opacity: 0.7; }
+  to   { transform: scale(1.7); opacity: 0; }
+}
+.hero-footer .play { transition: gap 0.5s var(--spring); }
+
+/* --- Chips float a little, each on its own beat --- */
+.hero-footer .chips .chip {
+  transition: transform 0.45s var(--spring), border-color 0.3s, color 0.3s;
+}
+.hero-footer .chips .chip:hover {
+  transform: translateY(-3px);
+  border-color: var(--accent);
+  color: var(--ink);
+}
+
+/* --- Scroll reveals (classes added from index.html) --- */
+.rv {
+  opacity: 0;
+  transform: translateY(32px);
+  transition:
+    opacity 0.9s var(--ease-soft) var(--rv-d, 0s),
+    transform 0.9s var(--ease-soft) var(--rv-d, 0s);
+  will-change: opacity, transform;
+}
+.rv.in { opacity: 1; transform: none; }
+
+/* Section heading tag line draws itself in */
+.section-head { position: relative; border-top-color: transparent; }
+.section-head::before {
+  content: '';
+  position: absolute; top: -1px; left: 0;
+  height: 1px; width: 100%;
+  background: var(--line);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 1.4s var(--ease-soft);
+}
+.section-head.in::before { transform: scaleX(1); }
+
+/* --- Spring hovers --- */
+.tape {
+  transition: transform 0.6s var(--spring), border-color 0.3s, box-shadow 0.6s var(--ease-soft);
+}
+.tape:hover {
+  transform: translateY(-8px) rotate(-0.6deg);
+  box-shadow: 0 22px 50px -18px rgba(255,106,61,0.35);
+}
+.tape:nth-child(even):hover { transform: translateY(-8px) rotate(0.6deg); }
+.tape-thumb img { transition: transform 1.2s var(--ease-soft); }
+.tape:hover .tape-thumb img { transform: scale(1.06); }
+.tape-play { transition: all 0.5s var(--spring); }
+
+.cv-btn { transition: all 0.5s var(--spring); }
+.tab { transition: background 0.35s var(--ease-soft), color 0.35s; }
+.tab.active::after { animation: grow 0.6s var(--ease-soft); transform-origin: left; }
+@keyframes grow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+.tab-panel-body { animation: fadeSwap 0.6s var(--ease-soft); }
+@keyframes fadeSwap { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+.node { transition: all 0.5s var(--spring); }
+
+/* --- Stats count up visually: soft pop on reveal --- */
+.about-stats .stat.rv { transform: translateY(20px) scale(0.96); }
+.about-stats .stat.rv.in { transform: none; }
+
+/* --- Timeline: clips grow in from the left once visible --- */
+.timeline-wrap .clip {
+  transform-origin: left center;
+  transform: scaleX(0);
+  transition: transform 1s var(--ease-soft), translate 0.3s var(--spring);
+}
+.timeline-wrap.in .clip { transform: scaleX(1); }
+.timeline-wrap.in .track:nth-child(1) .clip { transition-delay: 0.1s; }
+.timeline-wrap.in .track:nth-child(2) .clip { transition-delay: 0.3s; }
+.timeline-wrap.in .track:nth-child(3) .clip { transition-delay: 0.5s; }
+.timeline-wrap .clip:hover { translate: 0 -2px; }
+.track .clip:hover { transform: scaleX(1); }
+.playhead { animation: glow 3s ease-in-out infinite; }
+@keyframes glow {
+  0%,100% { box-shadow: 0 0 0 rgba(255,106,61,0); }
+  50%     { box-shadow: 0 0 14px rgba(255,106,61,0.6); }
+}
+
+/* --- Pull quote: a slow warm glow behind it --- */
+.pullquote { overflow: hidden; }
+.pullquote > * { position: relative; z-index: 1; }
+.pullquote blockquote::before {
+  content: '';
+  position: absolute;
+  left: 50%; top: 50%;
+  width: 520px; height: 260px;
+  translate: -50% -50%;
+  background: radial-gradient(ellipse, rgba(255,106,61,0.14), transparent 70%);
+  filter: blur(30px);
+  z-index: -1;
+  animation: aurora 18s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+/* --- Footer name breathes --- */
+.footer-big .dim { animation: blink 5s ease-in-out infinite; }
+@keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0.35; } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+  .rv, .hero-content .eyebrow, .hero-content h1, .hero-content .sub, .hero-footer {
+    opacity: 1 !important; transform: none !important; filter: none !important;
+  }
+  .timeline-wrap .clip { transform: none !important; }
+  .section-head::before { transform: none !important; }
+}
+
+/* ============ ARCHITECTURE DIAGRAMS (project media) ============ */
+.tab-panel .media.media-diagram {
+  background: var(--bg);
+  border-radius: 14px;
+  padding: 20px;
+  align-self: start;
+  min-height: 0;
+}
+.tab-panel .media.media-diagram::before { display: none; }
+.tab-panel .media.media-diagram .diagram { width: 100%; height: auto; display: block; position: relative; z-index: 2; }
+.diagram .flow {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 1.4;
+  stroke-dasharray: 5 6;
+  opacity: 0.75;
+  animation: flowdash 1.6s linear infinite;
+}
+.diagram .flow.b { stroke: var(--accent-2); animation-duration: 2.2s; }
+@keyframes flowdash { to { stroke-dashoffset: -22; } }
+@media (prefers-reduced-motion: reduce) { .diagram .flow { animation: none; } }
+.tab-panel .media.media-diagram .diagram-shot {
+  margin: 0 0 20px;
+  position: relative; z-index: 2;
+}
+.tab-panel .media.media-diagram .diagram-shot img {
+  display: block; width: 100%; height: auto;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  box-shadow: 0 18px 40px -20px rgba(0,0,0,0.8);
+  transition: transform 0.8s var(--ease-soft);
+}
+.tab-panel .media.media-diagram .diagram-shot:hover img { transform: scale(1.015); }
+.tab-panel .media.media-diagram .diagram-shot figcaption {
+  margin-top: 10px;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--ink-faint);
+}
+.tab-panel .media.media-diagram {
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  padding-top: 44px;
+}

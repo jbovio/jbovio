@@ -45,6 +45,31 @@ const App = () => {
     r.setProperty('--paper', tweaks.paper);
   }, [tweaks]);
 
+  // Organic scroll reveals: soft fade-up with a small stagger per group.
+  React.useEffect(() => {
+    const SEL = '.section-head, .about-grid .lead, .about-side .kv, .tape-stack-head, .tape, .about-stats .stat, .tabstrip, .tab-panel, .pw-card, .timeline-wrap, .pullquote blockquote, .pullquote cite, .cv-grid > *, .cv-actions .cv-btn, .footer-top';
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+    const tag = () => {
+      document.querySelectorAll(SEL).forEach((el) => {
+        if (el.dataset.rv) return;
+        el.dataset.rv = '1';
+        el.classList.add('rv');
+        const sib = Array.from(el.parentElement.children).filter((c) => c.matches(SEL));
+        el.style.setProperty('--rv-d', `${Math.min(sib.indexOf(el), 6) * 0.08}s`);
+        io.observe(el);
+      });
+    };
+    tag();
+    const mo = new MutationObserver(tag);
+    mo.observe(document.getElementById('root'), { childList: true, subtree: true });
+    return () => { io.disconnect(); mo.disconnect(); };
+  }, []);
+
   return (
     <>
       <nav className="nav">

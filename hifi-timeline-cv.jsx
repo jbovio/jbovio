@@ -48,8 +48,8 @@ const Timeline = () => {
   return (
     <section className="section" id="experience" data-screen-label="04 Timeline">
       <div className="section-head">
-        <div className="tag">§ 03 — experience</div>
-        <h2>a decade+,<br /><span className="it">one</span> timeline.</h2>
+        <div className="tag">03 — the road so far</div>
+        <h2>from modeler<br /><span className="it">to</span> lead.</h2>
         <div className="meta">
           <b>tracks</b><br />
           studios · projects · role<br /><br />
@@ -139,20 +139,20 @@ const Timeline = () => {
 const PullQuote = () =>
 <section className="pullquote" data-screen-label="05 Quote">
     <blockquote>
-      A pipeline isn't software. It's a <span className="accent">trust contract</span> between production and tech.
+      A pipeline isn't software. It's a <span className="accent">trust contract</span> between people — and leading it means keeping that promise.
     </blockquote>
-    <cite>— JFB · somewhere backstage · 2026</cite>
+    <cite>— Juan · probably over coffee</cite>
   </section>;
 
 
 const CV = () =>
 <section className="section cv" id="contact" data-screen-label="06 CV">
     <div className="section-head" style={{ marginBottom: 40 }}>
-      <div className="tag">§ 04 — hire</div>
+      <div className="tag">04 — say hi</div>
       <h2>let's talk.<br /><span className="it"></span></h2>
       <div className="meta">
         <b>looking for</b><br />
-        Senior Pipeline TD<br />
+        Pipeline Lead · Sr. Pipeline TD<br />
         remote · hybrid · MX<br /><br />
         <b>response time</b><br />
         under 24h
@@ -162,7 +162,7 @@ const CV = () =>
     <div className="cv-grid">
       <div>
         <p style={{ fontFamily: 'Fraunces, serif', fontSize: 28, lineHeight: 1.35, fontWeight: 300, color: 'var(--ink-soft)', maxWidth: 620 }}>
-          If you're hiring <span style={{ color: 'var(--accent)' }}>animation 3D technicians</span> and want someone who ships tools artists actually want to use — I'd love to hear about your show.
+          If you're building a team for animation or game cinematics and need someone who can <span style={{ color: 'var(--accent)' }}>lead the pipeline</span> and still sit down with an artist to fix their scene — write me. No formal pitch needed, just tell me about your show.
         </p>
       </div>
 
@@ -196,7 +196,7 @@ const Footer = () =>
       </div>
       <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 11, letterSpacing: '0.2em', color: 'var(--ink-soft)', textTransform: 'uppercase', textAlign: 'right' }}>
         senior · pipeline · td<br />
-        available · apr 2026<br />
+        happy to chat anytime<br />
         <span style={{ color: 'var(--accent)' }}>● open to work</span>
       </div>
     </div>

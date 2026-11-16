@@ -142,6 +142,112 @@ const PROJECTS = [
     imageUrl: 'assets/deadline_thumbnail.png',
     imageAspect: '1536 / 2752',
   },
+  {
+    id: 'assetdb',
+    idx: '05',
+    type: 'ASSET DATABASE',
+    title: 'Asset Database · One source of truth for the pipeline',
+    tabTitle: 'Asset Database',
+    headerLabel: 'Asset DB',
+    typeHeader: 'PostgreSQL / Rez',
+    tagline: 'Every asset, variant and LOD — versioned, traceable, named the same way every time.',
+    desc: 'A PostgreSQL-backed asset database for the studio pipeline, packaged as a Rez tool.',
+    descBlocks: [
+      { type: 'p', text: "The studio needed one place that knows what an asset is, which versions exist, and which files belong to each one. I designed the schema and the API contract so the database — not the artist, not the DCC — decides how things are named." },
+      { type: 'h', text: 'How it works' },
+      {
+        type: 'sub',
+        label: 'Schema',
+        text: 'Five PostgreSQL schemas: user, project, asset, version and resource.',
+        items: [
+          'Asset → variant → representation → LOD hierarchy',
+          'A dedicated version table for each level of that hierarchy',
+          'Resources (the actual files) linked to versions at any level',
+          'Audit columns on every table, plus a trigger that keeps updated_at honest',
+        ],
+      },
+      {
+        type: 'sub',
+        label: 'API as the authority',
+        text: 'The Publisher only sends metadata — asset ID, variant, LOD and file type. The API answers with the canonical filename.',
+        items: [
+          'POST /assets/{asset_id}/representations',
+          'No naming logic duplicated across DCC tools',
+        ],
+      },
+      {
+        type: 'sub',
+        label: 'Team-ready',
+        text: 'Shipped as a Rez package (Qt.py, sgtk), with a .env template and Docker setup so teammates can spin it up and run the examples themselves.',
+      },
+    ],
+    role: 'Architect + dev',
+    scale: 'Studio-wide asset catalog',
+    year: '2026 — ongoing',
+    impact: 'One naming authority instead of one per tool',
+    tech: ['PostgreSQL', 'Python', 'psycopg2', 'Rez', 'Docker', 'ShotGrid Toolkit'],
+    preview: 'log',
+    flow: 'in: publish metadata  →  out: canonical path',
+    diagram: 'schema',
+  },
+  {
+    id: 'stage',
+    idx: '06',
+    type: 'USD ASSET LIBRARY',
+    title: 'Stage · USD Asset Library for every DCC',
+    tabTitle: 'Stage',
+    headerLabel: 'Stage',
+    typeHeader: 'Web + DCC bridges',
+    tagline: 'Browse the studio library once, drop USD straight into Maya, Blender or Unreal.',
+    desc: 'A centralized USD asset library with a web frontend and lightweight HTTP bridges per DCC.',
+    descBlocks: [
+      { type: 'p', text: "Artists shouldn't have to hunt through folders to find an asset. Stage puts the whole USD library in one web page and lets them reference or import it into whatever DCC they have open." },
+      { type: 'h', text: 'Key decisions' },
+      {
+        type: 'sub',
+        label: 'Decoupled by design',
+        text: "Blender and Unreal don't ship Qt, so one embedded panel for every DCC wasn't possible. Instead: one web frontend served from the studio server, plus a tiny HTTP bridge inside each DCC.",
+        items: [
+          'Same protocol everywhere: POST /reference, POST /import, GET /ping',
+          'Immutable versioning and minimal client-side logic',
+          'Bridges rarely need to be redistributed to artist machines',
+        ],
+      },
+      {
+        type: 'sub',
+        label: 'The library',
+        text: 'What artists actually see and use every day.',
+        items: [
+          'Search plus filters by kind, library, project, type and status — grouped by library',
+          '3D preview with shaded, light, flat and wireframe modes',
+          'Contents tree: variants, representations (card / hero / proxy) and looks, each with its own version',
+          'Full version history with author, comment and date',
+          'One click to import, or reference the latest version — also works standalone, outside any DCC',
+        ],
+      },
+      {
+        type: 'sub',
+        label: 'DCC bridges',
+        text: 'Each one marshals requests onto the DCC main thread safely.',
+        items: [
+          'Maya — PySide6 dockable panel (QWebEngineView + browser fallback), executeInMainThreadWithResult',
+          'Blender — add-on using bpy.app.timers with a queue and threading.Event',
+          'Unreal 5.6 — slate post-tick callback; UsdStageActor for live references, AssetImportTask for native import',
+        ],
+      },
+    ],
+    role: 'Architect + lead dev',
+    scale: 'Multi-artist, multi-DCC',
+    year: '2026 — ongoing',
+    impact: 'One library, three DCCs, one protocol',
+    tech: ['USD', 'Python', 'PySide6', 'Blender bpy', 'Unreal 5.6', 'HTML / JS', 'PostgreSQL', 'Docker'],
+    preview: 'log',
+    flow: 'in: click in browser  →  out: USD in DCC',
+    diagram: 'stage',
+    imageUrl: 'assets/stage_asset_library.png',
+    imageAlt: 'Stage asset library: grid of USD assets with a 3D preview, contents tree and version history',
+    imageCaption: 'Stage running standalone — 46 assets from the studio catalog',
+  },
 ];
 
 // ------ inner-preview renderers (mini visuals shown inside the active tab panel) ------
@@ -216,6 +322,79 @@ const Preview = ({ kind, node }) => {
   return null;
 };
 
+
+// ------ architecture diagrams (media for projects without video/image) ------
+const DBox = ({ x, y, w, h, title, sub, tone }) => (
+  <g>
+    <rect x={x} y={y} width={w} height={h} rx="10"
+      fill="var(--bg-card)"
+      stroke={tone === 'a' ? 'var(--accent)' : tone === 'b' ? 'var(--accent-2)' : 'var(--line)'}
+      strokeWidth="1.2" />
+    <text x={x + w / 2} y={y + (sub ? h / 2 - 3 : h / 2 + 4)} textAnchor="middle"
+      fill="var(--ink)" fontFamily="JetBrains Mono, monospace" fontSize="11.5" letterSpacing="0.04em">{title}</text>
+    {sub && <text x={x + w / 2} y={y + h / 2 + 14} textAnchor="middle"
+      fill="var(--ink-faint)" fontFamily="JetBrains Mono, monospace" fontSize="9.5">{sub}</text>}
+  </g>
+);
+
+const Diagram = ({ kind }) => {
+  if (kind === 'schema') {
+    const cols = [
+      { x: 20,  t: 'asset',          v: 'asset_version' },
+      { x: 175, t: 'variant',        v: 'variant_version' },
+      { x: 330, t: 'representation', v: 'repr_version' },
+      { x: 485, t: 'lod',            v: 'lod_version' },
+    ];
+    return (
+      <svg className="diagram" viewBox="0 0 640 380" role="img"
+        aria-label="Database schema: asset, variant, representation and LOD, each with its own version table, all linked to resources">
+        {cols.slice(0, -1).map((c, i) => (
+          <path key={'h' + i} className="flow" d={`M${c.x + 135} 58 L${cols[i + 1].x} 58`} />
+        ))}
+        {cols.map((c, i) => (
+          <g key={'v' + i}>
+            <path className="flow b" d={`M${c.x + 67} 86 L${c.x + 67} 150`} />
+            <path className="flow" d={`M${c.x + 67} 206 L${c.x + 67} 270`} />
+          </g>
+        ))}
+        {cols.map((c) => <DBox key={c.t} x={c.x} y={30} w={135} h={56} title={c.t} sub="asset.*" tone="a" />)}
+        {cols.map((c) => <DBox key={c.v} x={c.x} y={150} w={135} h={56} title={c.v} sub="version.*" tone="b" />)}
+        <DBox x={20} y={270} w={600} h={50} title="resource" sub="the actual files — linked to a version at any level" />
+        <text x="320" y="356" textAnchor="middle" fill="var(--ink-faint)"
+          fontFamily="JetBrains Mono, monospace" fontSize="10" letterSpacing="0.12em">
+          + project · user · audit columns · updated_at trigger
+        </text>
+      </svg>
+    );
+  }
+  if (kind === 'stage') {
+    const dccs = [
+      { y: 20,  t: 'Maya',        s: 'PySide6 dock' },
+      { y: 130, t: 'Blender',     s: 'bpy.app.timers' },
+      { y: 240, t: 'Unreal 5.6',  s: 'UsdStageActor' },
+    ];
+    return (
+      <svg className="diagram" viewBox="0 0 640 380" role="img"
+        aria-label="Stage architecture: web frontend talks to Maya, Blender and Unreal bridges over one HTTP protocol, backed by an API and PostgreSQL">
+        {dccs.map((d) => (
+          <path key={d.t} className="flow" d={`M230 95 C 320 95, 330 ${d.y + 35}, 420 ${d.y + 35}`} />
+        ))}
+        <path className="flow b" d="M125 150 L125 240" />
+        <DBox x={20} y={40} w={210} h={110} title="Web frontend" sub="search · versions · deps" tone="a" />
+        {dccs.map((d) => <DBox key={d.t} x={420} y={d.y} w={200} h={70} title={d.t} sub={d.s} />)}
+        <DBox x={20} y={240} w={210} h={70} title="API + PostgreSQL" sub="Docker · studio server" tone="b" />
+        <text x="325" y="290" textAnchor="middle" fill="var(--accent)"
+          fontFamily="JetBrains Mono, monospace" fontSize="9.5" letterSpacing="0.1em">HTTP bridge</text>
+        <text x="320" y="356" textAnchor="middle" fill="var(--ink-faint)"
+          fontFamily="JetBrains Mono, monospace" fontSize="10" letterSpacing="0.12em">
+          one protocol: POST /reference · POST /import · GET /ping
+        </text>
+      </svg>
+    );
+  }
+  return null;
+};
+
 const Projects = ({ featured }) => {
   const [sel, setSel] = React.useState('sgctx');
   const [unlocked, setUnlocked] = React.useState(false);
@@ -243,8 +422,8 @@ const Projects = ({ featured }) => {
   return (
     <section className="section projects" id="work" data-screen-label="03 Projects">
       <div className="section-head">
-        <div className="tag">§ 02 — work</div>
-        <h2>engineering<br/><span className="it">the</span> pipeline.</h2>
+        <div className="tag">02 — work</div>
+        <h2>what I've<br/><span className="it">been</span> building.</h2>
         <div className="meta">
           <b>click a tab</b><br/>
           to open its inspector<br/><br/>
@@ -349,9 +528,9 @@ const Projects = ({ featured }) => {
           {/* BODY GRID */}
           <div className="tab-panel-body">
             {/* MEDIA */}
-            <div className={`media${selected.imageUrl && !selected.videoUrl ? ' media-image' : ''}`} style={
+            <div className={`media${selected.imageUrl && !selected.videoUrl && !selected.diagram ? ' media-image' : ''}${selected.diagram ? ' media-diagram' : ''}`} style={
               selected.videoUrl ? { aspectRatio: '16 / 9', minHeight: 0 } :
-              (selected.imageUrl && !selected.videoUrl) ? { alignSelf: 'stretch', minHeight: 0 } :
+              (selected.imageUrl && !selected.videoUrl && !selected.diagram) ? { alignSelf: 'stretch', minHeight: 0 } :
               undefined
             }>
               <div className="media-tag">[ {selected.type} ]</div>
@@ -366,6 +545,16 @@ const Projects = ({ featured }) => {
                     referrerPolicy="strict-origin-when-cross-origin"
                     style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', border: 'none', zIndex: 3, background: '#000' }}/>
                 )
+              ) : selected.diagram ? (
+                <>
+                  {selected.imageUrl && (
+                    <figure className="diagram-shot">
+                      <img src={selected.imageUrl} alt={selected.imageAlt || selected.title} />
+                      {selected.imageCaption && <figcaption>{selected.imageCaption}</figcaption>}
+                    </figure>
+                  )}
+                  <Diagram kind={selected.diagram} />
+                </>
               ) : selected.imageUrl ? (
                 <img src={selected.imageUrl} alt={selected.title}
                   style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'contain', zIndex: 3, background: 'transparent' }}/>

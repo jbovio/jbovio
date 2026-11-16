@@ -22,14 +22,14 @@ const Hero = () => {
       <div className="hero-content">
         <div className="eyebrow">
           <span className="rule"></span>
-          <span>Senior · Pipeline · TD · 16 YRS</span>
+          <span>Pipeline Lead · Senior TD · 16 yrs</span>
         </div>
         <h1>
           J.F.<br />
           Bovio<span className="it">.</span>
         </h1>
         <p className="sub">
-          Pipeline TD with 16 years bridging creative vision and technical execution in animation and VFX. Specialist in ShotGrid/Flow workflows, Python tooling, and render farm architecture — equally comfortable architecting systems and sitting with artists to understand what's slowing them down.
+          Hi, I'm Juan. For 16 years I've been the person standing between the artists and the tech — building pipelines, leading TD and CG teams, and making sure nobody loses a Friday night to a broken render. I love Python, USD and a well-tuned render farm, but what I care about most is a team that ships calm.
         </p>
       </div>
 
@@ -63,8 +63,8 @@ const About = () => {
   return (
     <section className="section about" id="about" data-screen-label="02 About">
       <div className="section-head">
-        <div className="tag">§ 01 — about</div>
-        <h2>pipelines,<br /><span className="it">not</span> bottlenecks.</h2>
+        <div className="tag">01 — about me</div>
+        <h2>good tools,<br /><span className="it">better</span> teams.</h2>
         <div className="meta">
           <b>based in</b><br />
           Monterrey, MX<br /><br />
@@ -77,10 +77,14 @@ const About = () => {
 
       <div className="about-grid">
         <div className="lead">
-          Fifteen years sitting <span className="underline">next to artists</span> to understand what's slowing them down — then writing the tool that unblocks them. I design production workflows that <span className="accent">scale</span>, and I ship the Python, the database, the render farm config, and the production-ready tools that bring them into the viewport. Track record on high-profile AAA game cinematics and broadcast animation.
+          I started as a modeler, became the TD people called when something broke, and ended up supervising rigging and CG for whole shows. Along the way I learned the real job: <span className="underline">listen first</span>, then build. Today I lead pipeline work on AAA game cinematics — setting direction, helping other TDs grow, and still writing the Python myself when it matters. I'd rather <span className="accent">earn trust</span> than enforce process.
         </div>
 
         <div className="about-side">
+          <div className="kv">
+            <span className="k">how I lead</span>
+            <span className="v">Listen first · decide in the open · protect the artists' time</span>
+          </div>
           <div className="kv">
             <span className="k">focus</span>
             <span className="v">ShotGrid/Flow · Python · USD · Render farm architecture</span>
@@ -101,7 +105,7 @@ const About = () => {
       </div>
 
       <div className="tape-stack-head">
-        <span className="lbl">§ 01.b — selected reels</span>
+        <span className="lbl">some work I'm proud of</span>
         <span className="title">a few clips.</span>
         <span className="count">04 / 04 · 2024–2026</span>
       </div>
@@ -143,16 +147,16 @@ const About = () => {
 
       <div className="about-stats">
         <div className="stat">
-          <div className="n">15<span style={{ color: 'var(--accent)' }}>+</span></div>
-          <div className="l">years in pipeline</div>
+          <div className="n">16<span style={{ color: 'var(--accent)' }}>+</span></div>
+          <div className="l">years in production</div>
         </div>
         <div className="stat">
           <div className="n">tons</div>
-          <div className="l">tools shipped</div>
+          <div className="l">tools shipped (lost count)</div>
         </div>
         <div className="stat">
           <div className="n">06</div>
-          <div className="l">studios</div>
+          <div className="l">studios, one crew mindset</div>
         </div>
         <div className="stat">
           <div className="n">∞</div>
