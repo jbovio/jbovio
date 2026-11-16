@@ -397,7 +397,13 @@ const Diagram = ({ kind }) => {
 
 const Projects = ({ featured }) => {
   const [sel, setSel] = React.useState('sgctx');
-  const [unlocked, setUnlocked] = React.useState(false);
+  // Direct link: ?k=<password> opens the work section without the gate.
+  const [unlocked, setUnlocked] = React.useState(() => {
+    try {
+      const k = new URLSearchParams(window.location.search).get('k');
+      return (k || '').trim().toLowerCase() === 'bovio';
+    } catch (e) { return false; }
+  });
   const [pwInput, setPwInput] = React.useState('');
   const [pwError, setPwError] = React.useState(false);
   const projects = PROJECTS;
