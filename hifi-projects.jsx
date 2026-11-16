@@ -549,7 +549,9 @@ const Projects = ({ featured }) => {
                 <>
                   {selected.imageUrl && (
                     <figure className="diagram-shot">
-                      <img src={selected.imageUrl} alt={selected.imageAlt || selected.title} />
+                      <a href={selected.imageUrl} target="_blank" rel="noopener noreferrer" title="Open full size">
+                        <img src={selected.imageUrl} alt={selected.imageAlt || selected.title} />
+                      </a>
                       {selected.imageCaption && <figcaption>{selected.imageCaption}</figcaption>}
                     </figure>
                   )}

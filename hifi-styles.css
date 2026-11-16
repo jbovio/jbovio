@@ -1874,3 +1874,30 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   justify-content: flex-start;
   padding-top: 44px;
 }
+
+/* Diagram projects: keep the media column at a readable size on wide screens */
+.tab-panel-body:has(.media-diagram) {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: start;
+}
+.tab-panel .media.media-diagram {
+  width: 100%;
+  max-width: 720px;
+  justify-self: end;
+  min-width: 0;
+}
+.tab-panel .media.media-diagram .diagram-shot img {
+  max-height: 420px;
+  object-fit: contain;
+  object-position: left top;
+  width: auto; max-width: 100%;
+}
+.tab-panel .media.media-diagram .diagram {
+  max-width: 520px;
+  margin: 0 auto;
+}
+@media (max-width: 1100px) {
+  .tab-panel-body:has(.media-diagram) { grid-template-columns: 1fr; }
+  .tab-panel .media.media-diagram { justify-self: stretch; max-width: none; }
+}
+.tab-panel .media.media-diagram .diagram-shot a { display: block; cursor: zoom-in; }
